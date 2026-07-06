@@ -44,9 +44,9 @@ class WayfireGPU : public WayfireWidget
 
     sigc::connection icon_timer;
 
-    WfOption <bool> show_percentage {"panel/gpu_show_percentage"};
-    WfOption <std::string> foreground_colour {"panel/gpu_foreground"};
-    WfOption <std::string> background_colour {"panel/gpu_background"};
+    WfOption <bool> show_percentage {"gpu/show_percentage"};
+    WfOption <std::string> foreground_colour {"gpu/foreground"};
+    WfOption <std::string> background_colour {"gpu/background"};
 
     /* plugin */
     GPUPlugin *gpu;
