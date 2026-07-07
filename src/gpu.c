@@ -234,7 +234,7 @@ void gpu_init (GPUPlugin *g)
 
     /* Set up button */
 #ifndef LXPLUG
-    add_long_press (g->plugin, NULL, NULL);
+    g->gesture = add_long_press (g->plugin, NULL, NULL);
 #endif
 
     gpu_update_display (g);
@@ -249,6 +249,11 @@ void gpu_init (GPUPlugin *g)
 void gpu_destructor (gpointer user_data)
 {
     GPUPlugin *g = (GPUPlugin *) user_data;
+
+#ifndef LXPLUG
+    if (g->gesture) g_object_unref (g->gesture);
+#endif
+
     graph_free (&(g->graph));
     if (g->timer) g_source_remove (g->timer);
     g_free (g);
