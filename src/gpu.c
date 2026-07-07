@@ -232,6 +232,11 @@ void gpu_init (GPUPlugin *g)
     graph_init (&(g->graph));
     gtk_container_add (GTK_CONTAINER (g->plugin), g->graph.da);
 
+    /* Set up button */
+#ifndef LXPLUG
+    add_long_press (g->plugin, NULL, NULL);
+#endif
+
     gpu_update_display (g);
 
     /* Connect a timer to refresh the statistics. */
