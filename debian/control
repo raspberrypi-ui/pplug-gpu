@@ -20,6 +20,6 @@ Description: GPU plugin for lxpanel-pi
 Package: wfplug-gpu
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
- wf-panel-pi (>=1.10)
+ wf-panel-pi (>=1.18)
 Description: GPU plugin for wf-panel-pi
  Plugin for wf-panel-pi to display GPU load.
