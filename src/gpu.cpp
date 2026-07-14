@@ -29,21 +29,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "gpu.hpp"
 
 extern "C" {
-    WayfireWidget *create () { return new WayfireGPU; }
-    void destroy (WayfireWidget *w) { delete w; }
+    PanelWidget *create () { return new WidgetGPU; }
+    void destroy (PanelWidget *w) { delete w; }
 
     const conf_table_t *config_params (void) { return conf_table; };
     const char *display_name (void) { return PLUGIN_TITLE; };
     const char *package_name (void) { return GETTEXT_PACKAGE; };
 }
 
-bool WayfireGPU::set_icon (void)
+bool WidgetGPU::set_icon (void)
 {
     gpu_update_display (gpu);
     return false;
 }
 
-void WayfireGPU::read_settings (void)
+void WidgetGPU::read_settings (void)
 {
     gpu->show_percentage = show_percentage;
     if (!gdk_rgba_parse (&gpu->foreground_colour, ((std::string) foreground_colour).c_str()))
@@ -52,13 +52,13 @@ void WayfireGPU::read_settings (void)
         gdk_rgba_parse (&gpu->background_colour, "light gray");
 }
 
-void WayfireGPU::settings_changed_cb (void)
+void WidgetGPU::settings_changed_cb (void)
 {
     read_settings ();
     gpu_update_display (gpu);
 }
 
-void WayfireGPU::init (Gtk::HBox *container)
+void WidgetGPU::init (Gtk::HBox *container)
 {
     /* Create the button */
     plugin = std::make_unique <Gtk::Button> ();
@@ -68,19 +68,19 @@ void WayfireGPU::init (Gtk::HBox *container)
     /* Setup structure */
     gpu = g_new0 (GPUPlugin, 1);
     gpu->plugin = (GtkWidget *)((*plugin).gobj());
-    icon_timer = Glib::signal_idle().connect (sigc::mem_fun (*this, &WayfireGPU::set_icon));
+    icon_timer = Glib::signal_idle().connect (sigc::mem_fun (*this, &WidgetGPU::set_icon));
 
     /* Initialise the plugin */
     read_settings ();
     gpu_init (gpu);
 
     /* Setup callbacks */
-    show_percentage.set_callback (sigc::mem_fun (*this, &WayfireGPU::settings_changed_cb));
-    foreground_colour.set_callback (sigc::mem_fun (*this, &WayfireGPU::settings_changed_cb));
-    background_colour.set_callback (sigc::mem_fun (*this, &WayfireGPU::settings_changed_cb));
+    show_percentage.set_callback (sigc::mem_fun (*this, &WidgetGPU::settings_changed_cb));
+    foreground_colour.set_callback (sigc::mem_fun (*this, &WidgetGPU::settings_changed_cb));
+    background_colour.set_callback (sigc::mem_fun (*this, &WidgetGPU::settings_changed_cb));
 }
 
-WayfireGPU::~WayfireGPU()
+WidgetGPU::~WidgetGPU()
 {
     icon_timer.disconnect ();
     gpu_destructor (gpu);

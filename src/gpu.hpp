@@ -36,7 +36,7 @@ extern "C" {
 #include "gpu.h"
 }
 
-class WayfireGPU : public WayfireWidget
+class WidgetGPU : public PanelWidget
 {
     std::unique_ptr <Gtk::Button> plugin;
 
@@ -52,7 +52,7 @@ class WayfireGPU : public WayfireWidget
   public:
 
     void init (Gtk::HBox *container) override;
-    virtual ~WayfireGPU ();
+    virtual ~WidgetGPU ();
     bool set_icon (void);
     void read_settings (void);
     void settings_changed_cb (void);
