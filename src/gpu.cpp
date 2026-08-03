@@ -45,16 +45,17 @@ bool WidgetGPU::set_icon (void)
 
 void WidgetGPU::read_settings (void)
 {
-    gpu->show_percentage = show_percentage;
-    if (!gdk_rgba_parse (&gpu->foreground_colour, ((std::string) foreground_colour).c_str()))
-        gdk_rgba_parse (&gpu->foreground_colour, "dark gray");
-    if (!gdk_rgba_parse (&gpu->background_colour, ((std::string) background_colour).c_str()))
-        gdk_rgba_parse (&gpu->background_colour, "light gray");
+    conf_table[0].value = (void *) &gpu->show_percentage;
+    conf_table[1].value = (void *) &gpu->foreground_colour;
+    conf_table[2].value = (void *) &gpu->background_colour;
+
+    load_configuration_data (PLUGIN_NAME, conf_table);
 }
 
-void WidgetGPU::settings_changed_cb (void)
+void WidgetGPU::handle_config_reload (void)
 {
-    read_settings ();
+    load_configuration_data (PLUGIN_NAME, conf_table);
+
     gpu_update_display (gpu);
 }
 
@@ -73,11 +74,6 @@ void WidgetGPU::init (Gtk::HBox *container)
     /* Initialise the plugin */
     read_settings ();
     gpu_init (gpu);
-
-    /* Setup callbacks */
-    show_percentage.set_callback (sigc::mem_fun (*this, &WidgetGPU::settings_changed_cb));
-    foreground_colour.set_callback (sigc::mem_fun (*this, &WidgetGPU::settings_changed_cb));
-    background_colour.set_callback (sigc::mem_fun (*this, &WidgetGPU::settings_changed_cb));
 }
 
 WidgetGPU::~WidgetGPU()

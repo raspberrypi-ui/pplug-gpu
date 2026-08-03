@@ -42,10 +42,6 @@ class WidgetGPU : public PanelWidget
 
     sigc::connection icon_timer;
 
-    WfOption <bool> show_percentage {"gpu/show_percentage"};
-    WfOption <std::string> foreground_colour {"gpu/foreground"};
-    WfOption <std::string> background_colour {"gpu/background"};
-
     /* plugin */
     GPUPlugin *gpu;
 
@@ -55,7 +51,7 @@ class WidgetGPU : public PanelWidget
     virtual ~WidgetGPU ();
     bool set_icon (void);
     void read_settings (void);
-    void settings_changed_cb (void);
+    void handle_config_reload (void);
 };
 
 #endif /* end of include guard: WIDGETS_GPU_HPP */
