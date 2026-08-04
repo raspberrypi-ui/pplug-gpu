@@ -58,6 +58,7 @@ extern conf_table_t conf_table[4];
 /*----------------------------------------------------------------------------*/
 
 extern void gpu_init (GPUPlugin *g);
+extern void gpu_set_values (GPUPlugin *g);
 extern void gpu_update_display (GPUPlugin *g);
 extern void gpu_destructor (gpointer user_data);
 

@@ -43,20 +43,9 @@ bool WidgetGPU::set_icon (void)
     return false;
 }
 
-void WidgetGPU::read_settings (void)
-{
-    conf_table[0].value = (void *) &gpu->show_percentage;
-    conf_table[1].value = (void *) &gpu->foreground_colour;
-    conf_table[2].value = (void *) &gpu->background_colour;
-
-    load_configuration_data (PLUGIN_NAME, conf_table);
-}
-
 void WidgetGPU::handle_config_reload (void)
 {
-    load_configuration_data (PLUGIN_NAME, conf_table);
-
-    gpu_update_display (gpu);
+    if (load_configuration_data (PLUGIN_NAME, conf_table)) gpu_update_display (gpu);
 }
 
 void WidgetGPU::init (Gtk::HBox *container)
@@ -72,7 +61,8 @@ void WidgetGPU::init (Gtk::HBox *container)
     icon_timer = Glib::signal_idle().connect (sigc::mem_fun (*this, &WidgetGPU::set_icon));
 
     /* Initialise the plugin */
-    read_settings ();
+    gpu_set_values (gpu);
+    load_configuration_data (PLUGIN_NAME, conf_table);
     gpu_init (gpu);
 }
 

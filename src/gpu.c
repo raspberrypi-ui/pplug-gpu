@@ -222,6 +222,13 @@ void gpu_update_display (GPUPlugin *g)
     graph_reload (&(g->graph), wrap_icon_size (g), g->background_colour, g->foreground_colour, none, none);
 }
 
+void gpu_set_values (GPUPlugin *g)
+{
+    conf_table[0].value = (void *) &g->show_percentage;
+    conf_table[1].value = (void *) &g->foreground_colour;
+    conf_table[2].value = (void *) &g->background_colour;
+}
+
 void gpu_init (GPUPlugin *g)
 {
     setlocale (LC_ALL, "");
@@ -276,15 +283,8 @@ static GtkWidget *gpu_constructor (LXPanel *panel, config_setting_t *settings)
     g->plugin = gtk_event_box_new ();
     lxpanel_plugin_set_data (g->plugin, g, gpu_destructor);
 
-    /* Set config defaults */
-    gdk_rgba_parse (&g->foreground_colour, "dark gray");
-    gdk_rgba_parse (&g->background_colour, "light gray");
-    g->show_percentage = TRUE;
-
     /* Read config */
-    conf_table[0].value = (void *) &g->show_percentage;
-    conf_table[1].value = (void *) &g->foreground_colour;
-    conf_table[2].value = (void *) &g->background_colour;
+    gpu_set_values (g);
     lxplug_read_settings (g->settings, conf_table);
 
     gpu_init (g);
