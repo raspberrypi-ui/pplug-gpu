@@ -37,18 +37,17 @@ extern "C" {
     const char *package_name (void) { return GETTEXT_PACKAGE; };
 }
 
-bool WidgetGPU::set_icon (void)
+void WidgetGPU::widget_set_icon (void)
 {
     gpu_update_display (gpu);
-    return false;
 }
 
-void WidgetGPU::handle_config_reload (void)
+void WidgetGPU::widget_config_reload (void)
 {
     if (load_configuration_data (PLUGIN_NAME, conf_table)) gpu_update_display (gpu);
 }
 
-void WidgetGPU::init (Gtk::HBox *container)
+void WidgetGPU::widget_init (Gtk::HBox *container)
 {
     /* Create the button */
     plugin = std::make_unique <Gtk::Button> ();
@@ -58,7 +57,6 @@ void WidgetGPU::init (Gtk::HBox *container)
     /* Setup structure */
     gpu = g_new0 (GPUPlugin, 1);
     gpu->plugin = (GtkWidget *)((*plugin).gobj());
-    icon_timer = Glib::signal_idle().connect (sigc::mem_fun (*this, &WidgetGPU::set_icon));
 
     /* Initialise the plugin */
     gpu_set_values (gpu);
@@ -68,7 +66,6 @@ void WidgetGPU::init (Gtk::HBox *container)
 
 WidgetGPU::~WidgetGPU()
 {
-    icon_timer.disconnect ();
     gpu_destructor (gpu);
 }
 
