@@ -12,14 +12,12 @@ Homepage: http://raspberrypi.com/
 
 Package: lpplug-gpu
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
- lxpanel-pi (>=1.8)
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: GPU plugin for lxpanel-pi
  Plugin for lxpanel-pi to display GPU load.
 
 Package: wfplug-gpu
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
- wf-panel-pi (>=1.23)
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: GPU plugin for wf-panel-pi
  Plugin for wf-panel-pi to display GPU load.

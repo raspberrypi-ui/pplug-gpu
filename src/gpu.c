@@ -28,11 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <locale.h>
 #include <glib/gi18n.h>
 
-#ifdef LXPLUG
 #include "plugin.h"
-#else
-#include "lxutils.h"
-#endif
 
 #include "gpu.h"
 
@@ -240,9 +236,7 @@ void gpu_init (GPUPlugin *g)
     gtk_container_add (GTK_CONTAINER (g->plugin), g->graph.da);
 
     /* Set up button */
-#ifndef LXPLUG
-    g->gesture = add_long_press (g->plugin, NULL, NULL);
-#endif
+    wrap_add_longpress (g->gesture, g->plugin, NULL, NULL);
 
     gpu_update_display (g);
 
@@ -257,80 +251,12 @@ void gpu_destructor (gpointer user_data)
 {
     GPUPlugin *g = (GPUPlugin *) user_data;
 
-#ifndef LXPLUG
-    if (g->gesture) g_object_unref (g->gesture);
-#endif
+    wrap_free_gesture (g->gesture);
 
     graph_free (&(g->graph));
     if (g->timer) g_source_remove (g->timer);
     g_free (g);
 }
-
-/*----------------------------------------------------------------------------*/
-/* LXPanel plugin functions                                                   */
-/*----------------------------------------------------------------------------*/
-#ifdef LXPLUG
-
-/* Constructor */
-static GtkWidget *gpu_constructor (LXPanel *panel, config_setting_t *settings)
-{
-    /* Allocate and initialize plugin context */
-    GPUPlugin *g = g_new0 (GPUPlugin, 1);
-
-    /* Allocate top level widget and set into plugin widget pointer. */
-    g->panel = panel;
-    g->settings = settings;
-    g->plugin = gtk_event_box_new ();
-    lxpanel_plugin_set_data (g->plugin, g, gpu_destructor);
-
-    /* Read config */
-    gpu_set_values (g);
-    lxplug_read_settings (g->settings, conf_table);
-
-    gpu_init (g);
-
-    return g->plugin;
-}
-
-/* Handler for system config changed message from panel */
-static void gpu_configuration_changed (LXPanel *, GtkWidget *plugin)
-{
-    GPUPlugin *g = lxpanel_plugin_get_data (plugin);
-    gpu_update_display (g);
-}
-
-/* Apply changes from config dialog */
-static gboolean gpu_apply_configuration (gpointer user_data)
-{
-    GPUPlugin *g = lxpanel_plugin_get_data (GTK_WIDGET (user_data));
-
-    lxplug_write_settings (g->settings, conf_table);
-
-    gpu_update_display (g);
-    return FALSE;
-}
-
-/* Display configuration dialog */
-static GtkWidget *gpu_configure (LXPanel *panel, GtkWidget *plugin)
-{
-    return lxpanel_generic_config_dlg_new (_(PLUGIN_TITLE), panel,
-        gpu_apply_configuration, plugin,
-        conf_table);
-}
-
-int module_lxpanel_gtk_version = 1;
-char module_name[] = PLUGIN_NAME;
-
-/* Plugin descriptor */
-LXPanelPluginInit fm_module_init_lxpanel_gtk = {
-    .name = PLUGIN_TITLE,
-    .config = gpu_configure,
-    .description = N_("Display GPU usage"),
-    .new_instance = gpu_constructor,
-    .reconfigure = gpu_configuration_changed,
-    .gettext_package = GETTEXT_PACKAGE
-};
-#endif
 
 /* End of file */
 /*----------------------------------------------------------------------------*/
