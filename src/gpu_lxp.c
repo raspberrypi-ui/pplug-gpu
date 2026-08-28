@@ -68,9 +68,7 @@ static void gpu_configuration_changed (LXPanel *, GtkWidget *plugin)
 static gboolean gpu_apply_configuration (gpointer user_data)
 {
     GPUPlugin *g = lxpanel_plugin_get_data (GTK_WIDGET (user_data));
-
     lxplug_write_settings (g->settings, conf_table);
-
     gpu_update_display (g);
     return FALSE;
 }
@@ -89,11 +87,11 @@ char module_name[] = PLUGIN_NAME;
 /* Plugin descriptor */
 LXPanelPluginInit fm_module_init_lxpanel_gtk = {
     .name = PLUGIN_TITLE,
-    .config = gpu_configure,
+    .gettext_package = GETTEXT_PACKAGE,
     .description = N_("Display GPU usage"),
     .new_instance = gpu_constructor,
     .reconfigure = gpu_configuration_changed,
-    .gettext_package = GETTEXT_PACKAGE
+    .config = gpu_configure
 };
 
 /* End of file */
