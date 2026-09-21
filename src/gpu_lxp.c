@@ -87,8 +87,8 @@ char module_name[] = PLUGIN_NAME;
 /* Plugin descriptor */
 LXPanelPluginInit fm_module_init_lxpanel_gtk = {
     .name = PLUGIN_TITLE,
+    .description = PLUGIN_DESC,
     .gettext_package = GETTEXT_PACKAGE,
-    .description = N_("Display GPU usage"),
     .new_instance = gpu_constructor,
     .reconfigure = gpu_configuration_changed,
     .config = gpu_configure
